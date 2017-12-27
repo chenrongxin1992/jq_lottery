@@ -14,6 +14,8 @@ var Audio = Audio || function() {
 
 
 var Lottery = (function() {
+  var delete_el = null,
+      delete_id = null
 
   var timer           = null,
       itemWidth       = 142,
@@ -35,10 +37,34 @@ var Lottery = (function() {
     //Pre-caculate the count of items
     itemCount       = $item.size();
     //Clone the contents
-    $content.append($content.html());
+    //$content.append($content.html());
   };
 
   var start  = function() {
+    if(delete_el){
+      console.log('开始剔除元素-->',delete_el)
+      delete_el.remove()
+      console.log('元素id-->',delete_id)
+      //提交
+      $.ajax({
+        url:'/delete_el', 
+        async:true,
+        dataType:'json',
+        type:'POST',
+        data:{
+          _id:delete_id,
+        },
+        success: function(result){
+          console.log('remove success')
+          console.log(result)
+        },
+        error: function(e){
+          console.log("error");
+
+        },
+      });
+
+    }
     clearInterval(timer);
 
     backAudio.play();
@@ -55,8 +81,8 @@ var Lottery = (function() {
 
     }, 5);
 
-    $hero.hide();
-    $hero_name.hide()
+    // $hero.hide();
+    // $hero_name.hide()
   };
 
   var stop = function() {
@@ -86,17 +112,19 @@ var Lottery = (function() {
         imgUrl = $items.eq(idx + 3).attr("src");
 
     let title = $items.eq(idx + 3).attr("title"),
-        check_id = $items.eq(idx + 3).attr("id");
+        attr = $items.eq(idx + 3).attr("attr");
     //let imgUrl = $content.eq(idx + 3).attr('src')
-    console.log('items-->',$items.size())
+    console.log('剩下-->',$items.size())
 
     $content.css("left", curPos);
     $hero.attr("src", imgUrl).show("slow");
     $hero_name.text(title).show('slow')
     console.log('name-->',title)
-    console.log('check_id-->',check_id)
+    delete_el = $('#'+attr)
+    delete_id = attr
+    console.log('待剔除-->',$items.eq(idx + 3),delete_el)
+
     console.log($hero_name)
-    
     console.log(curPos, idx);
   };
 

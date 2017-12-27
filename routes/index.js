@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/test',function(req,res){
-	let search = wxuserinfo.find({})
+	let search = wxuserinfo.find({ is_used:{ $ne:1}})
 		search.exec(function(err,docs){
 			if(err){
 				console.log('err-->',err)
@@ -17,5 +17,16 @@ router.get('/test',function(req,res){
 			console.log('docs-->',docs)
 			res.render('test',{userinfo:docs})
 		})
+})
+router.post('/delete_el',function(req,res){
+	let _id = req.body._id
+	console.log('check _id-->',_id)
+	wxuserinfo.remove({'_id':_id},function(err){
+		if(err){
+			console.log('err-->',err)
+			return res.json({'errCode':-1,'errMsg':err})
+		}
+		return res.json({'errCode':0,'errMsg':'remove success'})
+	})
 })
 module.exports = router;

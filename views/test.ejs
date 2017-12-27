@@ -21,7 +21,7 @@
         <div id="lottery-container">
             <ul>
                 <% var i = 0; userinfo.forEach(function(item){ i++; %>
-                    <li><img src="<%=item.headimgurl%>" title="<%=item.nickname%>" id="<%=item._id%>"></li>
+                    <li id="<%=item._id%>"><img src="<%=item.headimgurl%>" title="<%=item.nickname%>" attr="<%=item._id%>"></li>
                 <%})%>
             </ul>
         </div>
